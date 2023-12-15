@@ -98,6 +98,44 @@ class Graph {
 
     return array;
   }
+
+  shortestPath(start, target){
+    let toVisitQueue = [start]
+    let seen = new Set(toVisitQueue);
+    let parentMap = new Map()
+    let returnArray = []
+    const addParent = (node) => {
+      const parentNode = parentMap.get(node)
+      returnArray.unshift(parentNode)
+      if(parentNode === start) return
+      addParent(parentNode)
+    }
+
+
+    while(toVisitQueue.length){
+      
+      let visitedNode = toVisitQueue.shift();
+      
+      if(visitedNode === target){
+        returnArray.unshift(target)
+        addParent(visitedNode);
+        return returnArray;
+      }
+      
+      for(let node of visitedNode.adjacent){
+        if(!seen.has(node)){
+          parentMap.set(node, visitedNode)
+          toVisitQueue.push(node);
+          seen.add(node);
+        }
+      }
+    }
+
+    return undefined;
+
+  }
+
 }
+
 
 module.exports = {Graph, Node}
